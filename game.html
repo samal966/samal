@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة ألغاز</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f8ff;
+            color: #333;
+            padding: 20px;
+        }
+        .question-box {
+            background: #ffffff;
+            border: 2px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 500px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>لعبة الألغاز</h1>
+    <div class="question-box">
+        <p id="question">السؤال الأول سيظهر هنا</p>
+        <button id="option1" onclick="checkAnswer(1)"></button>
+        <button id="option2" onclick="checkAnswer(2)"></button>
+        <button id="option3" onclick="checkAnswer(3)"></button>
+    </div>
+    <p id="result"></p>
+
+    <script>
+        const questions = [
+            { question: "أنا شيء تستطيع أن تملأني بالماء لكنني لا أحتفظ به. من أكون؟", options: ["الكأس", "الإسفنج", "الحفرة"], correct: 2 },
+            { question: "ما هو الشيء الذي يكتب ولا يقرأ؟", options: ["القلم", "الكتاب", "الرسالة"], correct: 1 },
+            { question: "ما هو الشيء الذي يمشي بلا أرجل؟", options: ["الماء", "الهواء", "الظل"], correct: 3 },
+            { question: "ما هو الشيء الذي كلما أخذت منه كبر؟", options: ["الثقب", "الحفرة", "الصحراء"], correct: 1 },
+            { question: "ما هو الشيء الذي له وجه وليس له عين؟", options: ["الساعة", "العملة", "المرآة"], correct: 1 },
+            { question: "ما هو الشيء الذي يسمع بلا أذن ويتكلم بلا لسان؟", options: ["الهاتف", "الراديو", "التلفاز"], correct: 2 },
+            { question: "ما هو الشيء الذي إذا كسر لا يصدر صوتًا؟", options: ["الماء", "الصمت", "القلب"], correct: 2 },
+            { question: "ما هو الشيء الذي يملك أسنانًا ولا يعض؟", options: ["المشط", "المنشار", "المسمار"], correct: 1 },
+            { question: "ما هو الشيء الذي ينبض بلا قلب؟", options: ["الساعة", "الطبل", "القلب الصناعي"], correct: 1 },
+            { question: "ما هو الشيء الذي يدخل الماء ولا يبتل؟", options: ["السمك", "الظل", "الهواء"], correct: 2 },
+            { question: "ما هو الشيء الذي يطير بلا أجنحة؟", options: ["الوقت", "السحاب", "الريح"], correct: 1 },
+            { question: "ما هو الشيء الذي يتبعك أينما ذهبت؟", options: ["الظل", "الصوت", "الهواء"], correct: 1 },
+            { question: "ما هو البيت الذي ليس فيه أبواب ولا نوافذ؟", options: ["البيت المهجور", "بيت العنكبوت", "بيت الشعر"], correct: 3 },
+            { question: "ما هو الشيء الذي يحتوي على بحار دون ماء؟", options: ["الخريطة", "الصورة", "الكوكب"], correct: 1 },
+            { question: "ما هو الشيء الذي لا يمشي إلا بالضرب؟", options: ["المسمار", "الحصان", "العجلة"], correct: 1 },
+            { question: "ما هو الشيء الذي كلما طال قصر؟", options: ["الظل", "العمر", "الشمع"], correct: 3 },
+            { question: "ما هو الشيء الذي تأكل منه ولا يؤكل؟", options: ["الطبق", "المائدة", "القدر"], correct: 1 },
+            { question: "ما هو الشيء الذي يكبر كلما أخذت منه؟", options: ["الثقب", "الحفرة", "العمر"], correct: 1 },
+            { question: "ما هو الشيء الذي يحملك ويحمل أغراضك لكنه لا يتحرك؟", options: ["السيارة", "الحقيبة", "الحمار"], correct: 2 },
+            { question: "ما هو الشيء الذي ينام ولا يستيقظ؟", options: ["الميت", "الوسادة", "الحجر"], correct: 3 }
+        ];
+
+        let currentQuestion = 0;
+
+function loadQuestion() {
+            const questionEl = document.getElementById('question');
+            const option1 = document.getElementById('option1');
+            const option2 = document.getElementById('option2');
+            const option3 = document.getElementById('option3');
+            const resultEl = document.getElementById('result');
+
+            resultEl.textContent = ""; // مسح النتيجة
+            const current = questions[currentQuestion];
+            questionEl.textContent = current.question;
+            option1.textContent = current.options[0];
+            option2.textContent = current.options[1];
+            option3.textContent = current.options[2];
+        }
+
+        function checkAnswer(selected) {
+            const resultEl = document.getElementById('result');
+            if (selected === questions[currentQuestion].correct) {
+                resultEl.textContent = "إجابة صحيحة! أحسنت!";
+                resultEl.style.color = "green";
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    setTimeout(loadQuestion, 1000); // الانتقال للسؤال التالي بعد ثانية
+                } else {
+                    resultEl.textContent = "مبروك! لقد أكملت جميع الألغاز!";
+                }
+            } else {
+                resultEl.textContent = "إجابة خاطئة. حاول مرة أخرى!";
+                resultEl.style.color = "red";
+            }
+        }
+
+        // تحميل السؤال الأول عند فتح الصفحة
+        loadQuestion();
+    </script>
+</body>
+</html>
